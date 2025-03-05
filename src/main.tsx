@@ -6,7 +6,7 @@ import { IntlProvider } from "react-intl";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <IntlProvider locale="en">
+    <IntlProvider locale="en-IN">
       <App />
     </IntlProvider>
   </StrictMode>
