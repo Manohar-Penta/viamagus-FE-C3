@@ -1,3 +1,4 @@
+import { FormattedNumber } from "react-intl";
 import { Cart } from "../App";
 
 function Total({
@@ -18,12 +19,16 @@ function Total({
           {Object.keys(cart).map((id: string) => {
             return (
               <h3 key={id}>
-                <span className="text-xl lg:text-2xl flex justify-between">
+                <span className="text-lg lg:text-2xl flex justify-between">
                   <span className="grow">
                     {cart[Number(id)].name} x {cart[Number(id)].quantity}
                   </span>{" "}
                   <span>
-                    ${cart[Number(id)].price * cart[Number(id)].quantity}
+                    <FormattedNumber
+                      value={cart[Number(id)].price * cart[Number(id)].quantity}
+                      style="currency"
+                      currency="INR"
+                    />
                   </span>
                 </span>
               </h3>
@@ -31,32 +36,41 @@ function Total({
           })}
           <hr />
           {discount !== undefined && discount > 0 && (
-            <h3 className="text-xl lg:text-2xl flex justify-between">
+            <h3 className="text-lg lg:text-2xl flex justify-between">
               <span className="grow-[2]">Discount</span>
               <span>
-                $
-                {Object.keys(cart).reduce(
-                  (acc, id) =>
-                    acc + cart[Number(id)].price * cart[Number(id)].quantity,
-                  0
-                ) *
-                  (discount / 100)}
+                <FormattedNumber
+                  value={
+                    Object.keys(cart).reduce(
+                      (acc, id) =>
+                        acc +
+                        cart[Number(id)].price * cart[Number(id)].quantity,
+                      0
+                    ) *
+                    (discount / 100)
+                  }
+                  style="currency"
+                  currency="INR"
+                />
               </span>
             </h3>
           )}
-          <h1 className="text-xl lg:text-2xl font-semibold flex justify-between">
+          <h1 className="text-lg lg:text-2xl font-semibold flex justify-between">
             Sub Total
             <span>
-              $
-              {Object.keys(cart).reduce(
-                (acc, id) =>
-                  acc +
-                  (cart[Number(id)].price *
-                    cart[Number(id)].quantity *
-                    (100 - (discount ?? 0))) /
-                    100,
-                0
-              )}
+              <FormattedNumber
+                value={Object.keys(cart).reduce(
+                  (acc, id) =>
+                    acc +
+                    (cart[Number(id)].price *
+                      cart[Number(id)].quantity *
+                      (100 - (discount ?? 0))) /
+                      100,
+                  0
+                )}
+                style="currency"
+                currency="INR"
+              />
             </span>
           </h1>
         </div>
