@@ -65,7 +65,7 @@ function App() {
                           value={product.price}
                           style="currency"
                           currency="INR"
-                          minimumFractionDigits={2}
+                          maximumFractionDigits={0}
                         />
                       </h1>
                       {Object.keys(cart).find(
