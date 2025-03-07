@@ -10,7 +10,6 @@ function Total({
   discount: number | undefined;
   setCart: React.Dispatch<React.SetStateAction<Cart>>;
 }) {
-  console.log(discount);
   return (
     <>
       {Object.keys(cart).length > 0 && (
@@ -22,7 +21,7 @@ function Total({
           {Object.keys(cart).map((id: string) => {
             return (
               <h3 key={id}>
-                <span className="text-md lg:text-lg flex justify-between">
+                <span className="text-sm lg:text-md flex justify-between">
                   <span className="grow">
                     {cart[Number(id)].name} x {cart[Number(id)].quantity}
                   </span>{" "}
@@ -38,7 +37,7 @@ function Total({
             );
           })}
           <hr />
-          <h1 className="text-lg lg:text-xl flex justify-between">
+          <h1 className="text-md lg:text-lg flex justify-between">
             Sub Total
             <span>
               <FormattedNumber
@@ -53,8 +52,8 @@ function Total({
             </span>
           </h1>
           {discount && discount > 0 && (
-            <h3 className="text-lg lg:text-xl flex justify-between text-tertiary italic">
-              <span className="grow-[2]">Discount</span>
+            <h3 className="text-md lg:text-lg flex justify-between text-tertiary italic">
+              <span className="grow">Discount</span>
               <span>
                 -
                 <FormattedNumber
@@ -73,6 +72,7 @@ function Total({
               </span>
             </h3>
           )}
+          <hr />
           <h1 className="text-lg lg:text-xl font-semibold flex justify-between">
             Sub Total
             <span>

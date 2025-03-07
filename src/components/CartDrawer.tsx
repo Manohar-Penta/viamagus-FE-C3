@@ -1,9 +1,7 @@
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -27,8 +25,8 @@ export function CartDrawer({
           <FaCartShopping />
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+      <DrawerContent className="h-screen">
+        <div className="mx-auto w-full max-w-sm overflow-auto p-4">
           <DrawerHeader>
             <DrawerTitle className="text-center">Cart</DrawerTitle>
             <DrawerDescription className="text-center">
@@ -36,11 +34,7 @@ export function CartDrawer({
             </DrawerDescription>
           </DrawerHeader>
           <CartItems cart={cart} setCart={setCart} />
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button>Checkout</Button>
-            </DrawerClose>
-          </DrawerFooter>
+          <Button className="w-full">Checkout</Button>
         </div>
       </DrawerContent>
     </Drawer>

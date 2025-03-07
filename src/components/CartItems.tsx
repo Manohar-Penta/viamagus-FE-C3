@@ -22,17 +22,17 @@ function CartItems({
 
   return (
     <>
-      <div className="flex px-4 gap-2">
+      <div className="flex px-4 gap-2 items-center">
         <input
           type="number"
           min={0}
           max={100}
           placeholder="Enter your discount%"
-          className="border p-1 lg:p-2 border-collapse rounded text-lg lg:text-2xl font-semibold grow"
+          className="border p-1 px-4 rounded lg:text-lg grow"
           ref={disip}
         />
         <button
-          className="border p-2 rounded active:bg-amber-300 hover:bg-amber-200 italic"
+          className="border px-2 h-fit py-1 rounded active:bg-primary hover:bg-secondary active:text-white italic"
           onClick={() => {
             const discount = Number(disip.current?.value ?? 0);
             if (discount > 0 && discount <= 100) {

@@ -28,12 +28,12 @@ function App() {
       </h1>
       <div className="p-2">
         <div>
-          <div className="border m-2 p-2 rounded flex flex-col gap-2 max-w-[720px] mx-auto">
+          <div className="m-2 p-2 rounded flex flex-col gap-3 max-w-[720px] mx-auto">
             {productList.map((product) => {
               return (
                 <div
                   key={product.id}
-                  className="border p-4 flex items-center gap-2 lg:gap-4 justify-between"
+                  className="border shadow rounded-lg p-4 flex items-center gap-2 lg:gap-4 justify-between"
                 >
                   <img
                     src="/vite.svg"

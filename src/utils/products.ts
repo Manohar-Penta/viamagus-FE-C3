@@ -37,4 +37,28 @@ export const productList: Product[] = [
     price: 400,
     quantity: 0,
   },
+  {
+    id: 7,
+    name: "Product G",
+    price: 800,
+    quantity: 0,
+  },
+  {
+    id: 8,
+    name: "Product H",
+    price: 900,
+    quantity: 0,
+  },
+  {
+    id: 9,
+    name: "Product I",
+    price: 700,
+    quantity: 0,
+  },
+  {
+    id: 10,
+    name: "Product J",
+    price: 500,
+    quantity: 0,
+  },
 ];
