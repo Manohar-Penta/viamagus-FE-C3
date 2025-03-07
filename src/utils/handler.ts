@@ -3,7 +3,7 @@ import { Cart, Product } from "./Types";
 export function removeHandler(
   product: Product,
   cart: Cart,
-  setCart: React.Dispatch<any>
+  setCart: (cart: Cart) => void
 ) {
   if (!cart[product.id]) return;
 
@@ -25,7 +25,7 @@ export function removeHandler(
 export function addHandler(
   product: Product,
   cart: Cart,
-  setCart: React.Dispatch<any>
+  setCart: (cart: Cart) => void
 ) {
   const newCart = {
     ...cart,

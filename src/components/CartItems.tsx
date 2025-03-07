@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Total from "./Total";
-import { Cart } from "@/utils/Types";
 
-function CartItems({
-  cart,
-  setCart,
-}: {
-  cart: Cart;
-  setCart: React.Dispatch<React.SetStateAction<Cart>>;
-}) {
+function CartItems() {
   const [discount, setDiscount] = useState<number | undefined>();
   const disip = useRef<HTMLInputElement | null>(null);
 
@@ -22,7 +15,7 @@ function CartItems({
 
   return (
     <>
-      <div className="flex px-4 gap-2 items-center">
+      <div className={"flex px-4 gap-2 items-center"}>
         <input
           type="number"
           min={0}
@@ -53,7 +46,7 @@ function CartItems({
           {discount}% discount applied!!
         </p>
       )}
-      <Total cart={cart} discount={discount} setCart={setCart} />
+      <Total discount={discount} />
     </>
   );
 }

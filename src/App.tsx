@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { productList } from "./utils/products";
 import { FormattedNumber } from "react-intl";
 import { Cart } from "./utils/Types";
@@ -7,8 +7,23 @@ import { FaCartShopping } from "react-icons/fa6";
 import { TiMinus, TiPlus } from "react-icons/ti";
 import { CartDrawer } from "./components/CartDrawer";
 
+export type CartContext = {
+  cart: Cart;
+  setCartHandler: (cart: Cart) => void;
+};
+
+export const cartContext = createContext<CartContext | undefined>(undefined);
+
 function App() {
   const [cart, setCart] = useState<Cart>({});
+
+  const setCartHandler = useCallback(
+    (newCart: Cart) => {
+      setCart(newCart);
+      localStorage.setItem("Cart-Items", JSON.stringify(newCart));
+    },
+    [cart]
+  );
 
   useEffect(() => {
     const cartItems = localStorage.getItem("Cart-Items");
@@ -22,7 +37,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <cartContext.Provider value={{ cart, setCartHandler }}>
       <h1 className="w-full p-2 lg:p-4 bg-primary text-white text-2xl lg:text-3xl font-bold text-center">
         Products
       </h1>
@@ -60,7 +75,7 @@ function App() {
                           <button
                             className="active:bg-blue-200 p-2 rounded-full"
                             onClick={() => {
-                              removeHandler(product, cart, setCart);
+                              removeHandler(product, cart, setCartHandler);
                             }}
                           >
                             <TiMinus color="#1ba672" />
@@ -71,7 +86,7 @@ function App() {
                           <button
                             className="px-2 py-2 active:bg-blue-200 rounded-full"
                             onClick={() => {
-                              addHandler(product, cart, setCart);
+                              addHandler(product, cart, setCartHandler);
                             }}
                           >
                             <TiPlus color="#1ba672" />
@@ -81,7 +96,7 @@ function App() {
                         <button
                           className="px-2 py-1 lg:px-4 text-tertiary font-semibold rounded flex gap-1 items-center border hover:scale-105 hover:shadow-2xl transition-all"
                           onClick={() => {
-                            addHandler(product, cart, setCart);
+                            addHandler(product, cart, setCartHandler);
                           }}
                         >
                           <span>ADD</span>
@@ -96,8 +111,8 @@ function App() {
           </div>
         </div>
       </div>
-      <CartDrawer cart={cart} setCart={setCart} />
-    </>
+      <CartDrawer />
+    </cartContext.Provider>
   );
 }
 

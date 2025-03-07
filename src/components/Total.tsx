@@ -1,15 +1,11 @@
-import { Cart } from "@/utils/Types";
 import { FormattedNumber } from "react-intl";
+import { MdDelete } from "react-icons/md";
+import { useContext } from "react";
+import { CartContext, cartContext } from "@/App";
 
-function Total({
-  cart,
-  discount,
-  setCart,
-}: {
-  cart: Cart;
-  discount: number | undefined;
-  setCart: React.Dispatch<React.SetStateAction<Cart>>;
-}) {
+function Total({ discount }: { discount: number | undefined }) {
+  const { cart, setCartHandler } = useContext(cartContext) as CartContext;
+
   return (
     <>
       {Object.keys(cart).length > 0 && (
@@ -25,12 +21,21 @@ function Total({
                   <span className="grow">
                     {cart[Number(id)].name} x {cart[Number(id)].quantity}
                   </span>{" "}
-                  <span>
+                  <span className="flex gap-1 p-1 items-center">
                     <FormattedNumber
                       value={cart[Number(id)].price * cart[Number(id)].quantity}
                       style="currency"
                       currency="INR"
                     />
+                    <button
+                      onClick={() => {
+                        const newCart = structuredClone(cart);
+                        delete newCart[Number(id)];
+                        setCartHandler(newCart);
+                      }}
+                    >
+                      <MdDelete className="size-5 cursor-pointer" color="red" />
+                    </button>
                   </span>
                 </span>
               </h3>

@@ -7,17 +7,14 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "./ui/button";
-import { Cart } from "@/utils/Types";
 import { FaCartShopping } from "react-icons/fa6";
 import CartItems from "./CartItems";
+import { useContext } from "react";
+import { cartContext, CartContext } from "@/App";
 
-export function CartDrawer({
-  cart,
-  setCart,
-}: {
-  cart: Cart;
-  setCart: React.Dispatch<React.SetStateAction<Cart>>;
-}) {
+export function CartDrawer() {
+  const { cart } = useContext(cartContext) as CartContext;
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -26,16 +23,22 @@ export function CartDrawer({
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-screen">
-        <div className="mx-auto w-full max-w-sm overflow-auto p-4">
-          <DrawerHeader>
-            <DrawerTitle className="text-center">Cart</DrawerTitle>
-            <DrawerDescription className="text-center">
-              Make sure to apply the discount
-            </DrawerDescription>
-          </DrawerHeader>
-          <CartItems cart={cart} setCart={setCart} />
-          <Button className="w-full">Checkout</Button>
-        </div>
+        {Object.keys(cart).length > 0 ? (
+          <div className="mx-auto w-full max-w-sm overflow-auto p-4">
+            <DrawerHeader>
+              <DrawerTitle className="text-center">Cart</DrawerTitle>
+              <DrawerDescription className="text-center">
+                Make sure to apply the discount
+              </DrawerDescription>
+            </DrawerHeader>
+            <CartItems />
+            <Button className="w-full">Checkout</Button>
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-full text-2xl">
+            Your cart is empty
+          </div>
+        )}
       </DrawerContent>
     </Drawer>
   );
