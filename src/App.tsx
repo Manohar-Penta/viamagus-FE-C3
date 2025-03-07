@@ -1,27 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { productList } from "./utils/products";
-import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
-import Total from "./Components/Total";
 import { FormattedNumber } from "react-intl";
-
-type ProductDetails = {
-  name: string;
-  price: number;
-  quantity: number;
-};
-
-export type Cart = {
-  [key: number]: ProductDetails;
-};
+import { Cart } from "./utils/Types";
+import { addHandler, removeHandler } from "./utils/handler";
+import { FaCartShopping } from "react-icons/fa6";
+import { TiMinus, TiPlus } from "react-icons/ti";
+import { CartDrawer } from "./components/CartDrawer";
 
 function App() {
   const [cart, setCart] = useState<Cart>({});
-  const [discount, setDiscount] = useState<number | undefined>();
-  const disip = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const cartItems = localStorage.getItem("Cart-Items");
-    const discount = localStorage.getItem("Discount") ?? undefined;
     if (cartItems) {
       try {
         setCart(JSON.parse(cartItems));
@@ -29,16 +19,12 @@ function App() {
         console.log("Invalid cart data");
       }
     }
-    if (discount) {
-      setDiscount(parseInt(discount));
-      disip.current!.value = discount;
-    }
   }, []);
 
   return (
     <>
-      <h1 className="w-full p-2 lg:p-4 bg-yellow-300 text-2xl lg:text-3xl font-bold text-center">
-        Cart
+      <h1 className="w-full p-2 lg:p-4 bg-primary text-white text-2xl lg:text-3xl font-bold text-center">
+        Products
       </h1>
       <div className="p-2">
         <div>
@@ -47,133 +33,70 @@ function App() {
               return (
                 <div
                   key={product.id}
-                  className="border p-4 flex items-center gap-2 lg:gap-4 justify-between bg-amber-50"
+                  className="border p-4 flex items-center gap-2 lg:gap-4 justify-between"
                 >
-                  <div>
-                    <h1 className="font-semibold text-md lg:text-2xl">
-                      <span className="font-medium text-sm lg:text-xl">
-                        Name :{" "}
-                      </span>{" "}
+                  <img
+                    src="/vite.svg"
+                    alt=""
+                    className="h-[75px] lg:h-[100px] bg-secondary p-2 rounded"
+                  />
+                  <div className="grow">
+                    <h1 className="font-semibold text-md lg:text-lg px-4">
                       {product.name}
                     </h1>
-                    <h1 className="font-semibold text-md lg:text-2xl">
-                      {" "}
-                      <span className="font-medium text-sm lg:text-xl">
-                        Price :{" "}
-                      </span>{" "}
-                      <FormattedNumber
-                        value={product.price}
-                        style="currency"
-                        currency="INR"
-                        minimumFractionDigits={2}
-                      />
-                    </h1>
-                  </div>
-                  <div className="flex gap-1 lg:gap-2 border p-1 lg:p-2 rounded-xl items-center">
-                    <button
-                      className="active:bg-blue-200 p-1 lg:p-3 rounded-full"
-                      onClick={() => {
-                        if (!cart[product.id]) return;
-
-                        const newCart = {
-                          ...cart,
-                          [product.id]: {
-                            name: product.name,
-                            price: product.price,
-                            quantity: Math.max(
-                              (cart[product.id]?.quantity ?? 0) - 1,
-                              0
-                            ),
-                          },
-                        };
-
-                        if (newCart[product.id].quantity === 0)
-                          delete newCart[product.id];
-
-                        setCart(newCart);
-                        localStorage.setItem(
-                          "Cart-Items",
-                          JSON.stringify(newCart)
-                        );
-                      }}
-                    >
-                      <FaMinusCircle />
-                    </button>
-                    <input
-                      type="number"
-                      className="font-semibold text-lg lg:text-2xl text-center outline-none w-6 lg:w-10"
-                      value={cart[product.id]?.quantity ?? product.quantity}
-                      onChange={(e) => {
-                        const newCart = {
-                          ...cart,
-                          [product.id]: {
-                            name: product.name,
-                            price: product.price,
-                            quantity: Number(e.target.value),
-                          },
-                        };
-                        if (newCart[product.id].quantity === 0)
-                          delete newCart[product.id];
-                        setCart(newCart);
-                        localStorage.setItem(
-                          "Cart-Items",
-                          JSON.stringify(newCart)
-                        );
-                      }}
-                    />
-                    <button
-                      className="p-2 lg:p-4 active:bg-blue-200 rounded-full"
-                      onClick={() => {
-                        const newCart = {
-                          ...cart,
-                          [product.id]: {
-                            name: product.name,
-                            price: product.price,
-                            quantity:
-                              (cart[product.id]?.quantity ?? product.quantity) +
-                              1,
-                          },
-                        };
-                        setCart(newCart);
-                        localStorage.setItem(
-                          "Cart-Items",
-                          JSON.stringify(newCart)
-                        );
-                      }}
-                    >
-                      <FaPlusCircle />
-                    </button>
+                    <div className="flex justify-between items-center">
+                      <h1 className="font-semibold text-sm px-4">
+                        <FormattedNumber
+                          value={product.price}
+                          style="currency"
+                          currency="INR"
+                          minimumFractionDigits={2}
+                        />
+                      </h1>
+                      {Object.keys(cart).find(
+                        (item) => parseInt(item) == product.id
+                      ) ? (
+                        <div className="flex gap-1 border rounded-xl items-center">
+                          <button
+                            className="active:bg-blue-200 p-2 rounded-full"
+                            onClick={() => {
+                              removeHandler(product, cart, setCart);
+                            }}
+                          >
+                            <TiMinus color="#1ba672" />
+                          </button>
+                          <p className="font-semibold  lg:text-lg text-tertiary">
+                            {cart[product.id]?.quantity ?? product.quantity}
+                          </p>
+                          <button
+                            className="px-2 py-2 active:bg-blue-200 rounded-full"
+                            onClick={() => {
+                              addHandler(product, cart, setCart);
+                            }}
+                          >
+                            <TiPlus color="#1ba672" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          className="px-2 py-1 lg:px-4 text-tertiary font-semibold rounded flex gap-1 items-center border hover:scale-105 hover:shadow-2xl transition-all"
+                          onClick={() => {
+                            addHandler(product, cart, setCart);
+                          }}
+                        >
+                          <span>ADD</span>
+                          <FaCartShopping color="#1ba672" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
-          <div className="max-w-[720px] mx-auto p-2 flex gap-2 lg:gap-4">
-            <input
-              type="number"
-              min={0}
-              max={100}
-              placeholder="Enter your discount%"
-              className="w-full border p-1 lg:p-2 border-collapse rounded text-lg lg:text-2xl font-semibold"
-              ref={disip}
-            />
-            <button
-              className="border p-2 rounded active:bg-amber-300 hover:bg-amber-200 italic"
-              onClick={() => {
-                const discount = Number(disip.current?.value);
-                if (discount >= 0 && discount <= 100) {
-                  setDiscount(discount);
-                  localStorage.setItem("Discount", discount.toString());
-                  return;
-                }
-              }}
-            >
-              Apply
-            </button>
-          </div>
         </div>
-        <Total cart={cart} discount={discount} />
       </div>
+      <CartDrawer cart={cart} setCart={setCart} />
     </>
   );
 }
