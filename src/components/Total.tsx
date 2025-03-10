@@ -43,7 +43,7 @@ function Total({ discount }: { discount: number | undefined }) {
           })}
           <hr />
           <h1 className="text-md lg:text-lg flex justify-between">
-            Sub Total
+            Total
             <span>
               <FormattedNumber
                 value={Object.keys(cart).reduce((acc, id) => {
